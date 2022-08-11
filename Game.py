@@ -1,5 +1,3 @@
-
-from turtle import onkey
 import arcade 
 import random
 
@@ -39,15 +37,15 @@ Z = [['.....',
       '.0...',
       '.....']]
 
-I = [['..0..',
-      '..0..',
-      '..0..',
-      '..0..',
-      '.....'],
-     ['.....',
+I = [['.....',
       '0000.',
       '.....',
       '.....',
+      '.....'],
+     ['..0..',
+      '..0..',
+      '..0..',
+      '..0..',
       '.....']]
 
 O = [['.....',
@@ -194,7 +192,7 @@ class Tetris(arcade.Window):
         Render the screen.
         """
         self.clear()
-
+        self.draw_next_shape(self.next_piece)
         for i in range(len(self.grid)):
             for j in range(len(self.grid[i])):
                 arcade.draw_rectangle_filled(center_x = START_CENTER_X + j*BLOCK_SIZE, center_y = START_CENTER_Y - i*BLOCK_SIZE, width = BLOCK_SIZE, height =BLOCK_SIZE, color = self.grid[i][j])
@@ -228,7 +226,8 @@ class Tetris(arcade.Window):
             self.time = 0
             if not(self.valid_space(self.current_piece, self.grid)):
                 self.current_piece.y -= 1
-
+                self.time = 1
+                
         if symbol == arcade.key.UP: # Rotates the peace
             print("this is a key test UP")
             self.current_piece.rotation += 1
@@ -311,6 +310,22 @@ class Tetris(arcade.Window):
             for j in range(0, len(grid[i])):
                 if j >= 1:
                     arcade.draw_line(start_x= TOP_LEFT_X + (j * BLOCK_SIZE), end_x= TOP_LEFT_X + (j* 30), start_y= TOP_LEFT_Y, end_y= TOP_LEFT_Y - PLAY_SPACE_HEIGHT, color= arcade.color.WHITE)
+
+    def draw_next_shape(self, shape):
+        """
+        Draws the next shape that will be used in the game
+        """
+        arcade.draw_text(start_x= SCREEN_WIDTH * 3/4, start_y= SCREEN_HEIGHT * 3 / 4, text= "Next Shape", font_size = 20, align="center",width= 100, color = arcade.color.BLACK)
+        format = shape.shape[shape.rotation]
+        x_placement = START_CENTER_X + PLAY_SPACE_WIDTH + 30
+        y_placement = START_CENTER_Y - PLAY_SPACE_HEIGHT/2 + 50
+
+        for i, line in enumerate(format):
+            row = list(line)
+            for j, column in enumerate(row):
+                if column == "0" :
+                    arcade.draw_rectangle_filled(center_x= x_placement + (j*BLOCK_SIZE), center_y= y_placement + (i*BLOCK_SIZE), width= BLOCK_SIZE, height= BLOCK_SIZE, color = shape.color)
+
 
 def main():
     """ Main function """
