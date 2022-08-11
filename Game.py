@@ -177,6 +177,7 @@ class Tetris(arcade.Window):
                 self.current_piece = self.next_piece
                 self.next_piece = self.get_shape()
                 self.change_piece = False
+                self.clear_rows(self.grid, self.locked_pos)
         else:
             self.current_piece.shape_pos = self.convert_shape_format(self.current_piece)
             for i in range(len(self.current_piece.shape_pos)):
@@ -227,7 +228,7 @@ class Tetris(arcade.Window):
             if not(self.valid_space(self.current_piece, self.grid)):
                 self.current_piece.y -= 1
                 self.time = 1
-                
+
         if symbol == arcade.key.UP: # Rotates the peace
             print("this is a key test UP")
             self.current_piece.rotation += 1
@@ -326,7 +327,28 @@ class Tetris(arcade.Window):
                 if column == "0" :
                     arcade.draw_rectangle_filled(center_x= x_placement + (j*BLOCK_SIZE), center_y= y_placement + (i*BLOCK_SIZE), width= BLOCK_SIZE, height= BLOCK_SIZE, color = shape.color)
 
+    def clear_rows(self, grid, locked):
+        """
+        Clears the rows that are full and gives points.
+        """
+        inc = 0
+        for i in range(len(grid) -1, -1, -1):
+            row = grid[i]
+            if (0,0,0) not in row:
+                inc += 1
+                ind = i
+                for j in range(len(row)):
+                    try:
+                        del locked[j,i]
+                    except:
+                        continue
 
+        if inc > 0:
+            for key in sorted(list(locked), key = lambda x: x[1]) [::-1]:
+                x, y = key
+                if y < ind:
+                    newKey = (x,y + inc)
+                    locked[newKey] = locked.pop(key)
 def main():
     """ Main function """
     game = Tetris(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
