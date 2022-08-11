@@ -37,15 +37,15 @@ Z = [['.....',
       '.0...',
       '.....']]
 
-I = [['.....',
+I = [['..0..',
+      '..0..',
+      '..0..',
+      '..0..',
+      '.....',],
+    ['.....',
       '0000.',
       '.....',
       '.....',
-      '.....'],
-     ['..0..',
-      '..0..',
-      '..0..',
-      '..0..',
       '.....']]
 
 O = [['.....',
@@ -157,6 +157,7 @@ class Tetris(arcade.Window):
         """
         self.time += delta_time
         seconds = int(self.time) % 60
+
         if seconds == 1:
             self.time = 0
             self.current_piece.y += 1
@@ -272,8 +273,9 @@ class Tetris(arcade.Window):
 
         for pos in formatted:
             if pos not in accepted_pos:
-                if pos[1] > -1:
+                if pos[1] > -1 or ((pos[0] < 0 or pos[0] > 9)):
                     return False
+                    
         return True
 
     def check_lost(self, positions):
@@ -340,6 +342,7 @@ class Tetris(arcade.Window):
                         continue
 
         if inc > 0:
+            print(inc)
             for key in sorted(list(locked), key = lambda x: x[1]) [::-1]:
                 x, y = key
                 if y < ind:
