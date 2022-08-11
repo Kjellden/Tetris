@@ -210,19 +210,16 @@ class Tetris(arcade.Window):
         Up arrow: Rotates the current peace.
         """
         if symbol == arcade.key.RIGHT: # Moves the peace to the right one tile
-            print("this is a key test RIGHT")
             self.current_piece.x += 1
             if not(self.valid_space(self.current_piece, self.grid)):
                 self.current_piece.x -= 1  
 
         if symbol == arcade.key.LEFT: # Moves the peace to the left one tile
-            print("this is a key test LEFT")
             self.current_piece.x -= 1
             if not(self.valid_space(self.current_piece, self.grid)):
                 self.current_piece.x += 1
 
         if symbol == arcade.key.DOWN: # Moves the peace down by one tile
-            print("this is a key test DOWN")
             self.current_piece.y += 1
             self.time = 0
             if not(self.valid_space(self.current_piece, self.grid)):
@@ -230,7 +227,6 @@ class Tetris(arcade.Window):
                 self.time = 1
 
         if symbol == arcade.key.UP: # Rotates the peace
-            print("this is a key test UP")
             self.current_piece.rotation += 1
             if not(self.valid_space(self.current_piece, self.grid)):
                 self.current_piece.rotation -= 1
