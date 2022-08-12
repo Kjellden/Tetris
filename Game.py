@@ -1,3 +1,4 @@
+from tkinter import CENTER
 import arcade 
 import random
 
@@ -186,6 +187,9 @@ class Tetris(arcade.Window):
                 if y > -1:
                     self.grid[y][x] = self.current_piece.color
 
+        if self.check_lost(self.locked_pos) == True:
+            arcade.close_window()
+
     def setup(self):
         pass
 
@@ -194,6 +198,7 @@ class Tetris(arcade.Window):
         Render the screen.
         """
         self.clear()
+
         self.draw_next_shape(self.next_piece)
         for i in range(len(self.grid)):
             for j in range(len(self.grid[i])):
@@ -201,7 +206,8 @@ class Tetris(arcade.Window):
                 
         self.draw_grid(self.grid)
         self.grid = self.create_grid(self.locked_pos)
-        
+        self.draw_score()
+
     def on_key_press(self, symbol, modifiers):
         """
         On a key event the game will move the current peace. The set movements for this game are
@@ -226,6 +232,8 @@ class Tetris(arcade.Window):
             if not(self.valid_space(self.current_piece, self.grid)):
                 self.current_piece.y -= 1
                 self.time = 1
+            else:
+                self.score += 10
 
         if symbol == arcade.key.UP: # Rotates the peace
             self.current_piece.rotation += 1
@@ -348,6 +356,25 @@ class Tetris(arcade.Window):
                 if y < ind:
                     newKey = (x,y + inc)
                     locked[newKey] = locked.pop(key)
+
+            if inc == 1:
+                self.score += 100
+                
+            elif inc == 2:
+                self.score += 200
+                            
+            elif inc == 3:
+                self.score += 300
+               
+            elif inc == 4:
+                self.score += 1000
+                
+    def draw_score(self):
+        """
+        This will print out the score onto the screen to the player can see there score.
+        """
+        arcade.draw_text(text= f"Score: {self.score}", start_x= START_CENTER_X / 2, start_y= START_CENTER_Y * 3/4, font_size= 15, anchor_x= "center", color = arcade.color.BLACK)
+
 def main():
     """ Main function """
     game = Tetris(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
